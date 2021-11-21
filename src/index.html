@@ -19,9 +19,10 @@
             <span class="navbar-brand mb-0 h1"><i class="icon ion-md-bookmarks text-danger"></i>Library</span>
         </div>
         <div class="navbar-nav d-flex flex-row">
-            <a class="nav-link mx-1" aria-current="page" href="#" data-bs-toggle="modal"
+            <a class="nav-link mx-1" id="signUp" aria-current="page" href="#" data-bs-toggle="modal"
                 data-bs-target="#signUpModal">Sign Up</a>
-            <a class="nav-link mx-3" href="#" data-bs-toggle="modal" data-bs-target="#signInModal">Sign In</a>
+            <a class="nav-link mx-3" id="signIn" href="#" data-bs-toggle="modal" data-bs-target="#signInModal">Sign
+                In</a>
             <a class="nav-link mx-3" href="#" id="logout"><i class="icon ion-md-exit"></i> Logout</a>
         </div>
     </nav>
@@ -47,14 +48,18 @@
                         </div>
                         <div class="d-grid">
                             <button type="submit" class="btn btn-primary ">Register</button>
+
                         </div>
-<<<<<<< HEAD
                 </div>
-                </form>
-=======
-                    </div>
-                    </form>
->>>>>>> 06089c6ac07f554af7694c0b2aa51d27c0d8c7b9
+            </form>
+            <div class="modal-footer d-flex flex-column align-items-stretch">
+                <button class="btn btn-danger btn-block  mt-2" id="googleSignIn"><i
+                        class="icon ion-logo-google text-light mx-1"></i>Sign in with Google</button>
+
+                <span class="text-center mt-2">¿Already have an account? <span class="fw-bold text-primary"
+                        style="cursor: pointer; text-decoration: underline;" data-bs-toggle="modal"
+                        data-bs-target="#signInModal">Sign In</span></span>
+            </div>
             </div>
         </div>
     </div>
@@ -82,7 +87,15 @@
                             <button type="submit" class="btn btn-primary ">Login</button>
                         </div>
                 </div>
-                </form>
+            </form>
+            <div class="modal-footer d-flex flex-column align-items-stretch">
+                <button class="btn btn-danger btn-block  mt-2" id="googleSignIn"><i
+                        class="icon ion-logo-google text-light mx-1"></i>Sign in with Google</button>
+
+                <span class="text-center mt-2">¿Don't have an account? <span class="fw-bold text-primary"
+                        style="cursor: pointer; text-decoration: underline;" data-bs-toggle="modal"
+                        data-bs-target="#signUpModal">Sign Up</span></span>
+            </div>
             </div>
 
         </div>
