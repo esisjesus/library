@@ -51,15 +51,15 @@
 
                         </div>
                 </div>
-            </form>
-            <div class="modal-footer d-flex flex-column align-items-stretch">
-                <button class="btn btn-danger btn-block  mt-2" id="googleSignIn"><i
-                        class="icon ion-logo-google text-light mx-1"></i>Sign in with Google</button>
+                </form>
+                <div class="modal-footer d-flex flex-column align-items-stretch">
+                    <button class="btn btn-danger btn-block  mt-2" id="googleSignIn"><i
+                            class="icon ion-logo-google text-light mx-1"></i>Sign in with Google</button>
 
-                <span class="text-center mt-2">¿Already have an account? <span class="fw-bold text-primary"
-                        style="cursor: pointer; text-decoration: underline;" data-bs-toggle="modal"
-                        data-bs-target="#signInModal">Sign In</span></span>
-            </div>
+                    <span class="text-center mt-2">¿Already have an account? <span class="fw-bold text-primary"
+                            style="cursor: pointer; text-decoration: underline;" data-bs-toggle="modal"
+                            data-bs-target="#signInModal">Sign In</span></span>
+                </div>
             </div>
         </div>
     </div>
@@ -87,19 +87,70 @@
                             <button type="submit" class="btn btn-primary ">Login</button>
                         </div>
                 </div>
-            </form>
-            <div class="modal-footer d-flex flex-column align-items-stretch">
-                <button class="btn btn-danger btn-block  mt-2" id="googleSignIn"><i
-                        class="icon ion-logo-google text-light mx-1"></i>Sign in with Google</button>
+                </form>
+                <div class="modal-footer d-flex flex-column align-items-stretch">
+                    <button class="btn btn-danger btn-block  mt-2" id="googleSignIn"><i
+                            class="icon ion-logo-google text-light mx-1"></i>Sign in with Google</button>
 
-                <span class="text-center mt-2">¿Don't have an account? <span class="fw-bold text-primary"
-                        style="cursor: pointer; text-decoration: underline;" data-bs-toggle="modal"
-                        data-bs-target="#signUpModal">Sign Up</span></span>
-            </div>
+                    <span class="text-center mt-2">¿Don't have an account? <span class="fw-bold text-primary"
+                            style="cursor: pointer; text-decoration: underline;" data-bs-toggle="modal"
+                            data-bs-target="#signUpModal">Sign Up</span></span>
+                </div>
             </div>
 
         </div>
     </div>
+    </div>
+
+    <!-- Add Book Modal -->
+    <div class="modal fade" id="addBookModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Add new Book 📕</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addBookForm">
+                        <div class="form-group mb-3">
+                            <label for="bookTitle">Title</label>
+                            <input type="text" id="bookTitle" class="form-control" placeholder="Book title" required>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="bookAuthor">Author</label>
+                            <input type="text" id="bookAuthor" class="form-control" placeholder="Book author" required>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="bookDescription">Give us a brief description 😀</label>
+                            <input type="textarea" id="bookDescription" class="form-control" placeholder="Type a description here" required>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="bookPages">How many pages does this book have?</label>
+                            <input type="number" id="bookPages" class="form-control"  required>
+                        </div>
+                        <div class="form-group mb-3">
+                            <input style="display: inline;" type="checkbox" id="bookRead" class="form-check"><span style="position: relative; top: -6px;"> I've read this book</span>
+                        </div>
+                        <div class="modal-footer d-flex flex-column align-items-stretch">
+                            <button type="submit" class="btn btn-danger btn-block  mt-2" id="addBookButton">Add Book to your Library</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    </div>
+    <!-- User's Library -->
+    <div class="container-fluid p-5" id="library" >
+        <!-- Add new book card -->
+        <div class="card border-danger mb-3 shadow bg-danger col " onclick="addNewBookModal()"
+            style="max-width: 18rem; min-height: 350px; cursor: pointer;">
+            <i style="font-size: 150px; position: relative; top: 55px;"
+                class="icon ion-md-add-circle text-center text-light"></i>
+            <h5 class="text-center mt-4 text-light">Add new book</h5>
+        </div>
+
     </div>
 
     <!-- BOOTSTRAP SCRIPTS -->
@@ -121,9 +172,9 @@
         };
 
         // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
+        const app = firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth()
-        const firestore = firebase.firestore();
+        const db = firebase.firestore(app);
     </script>
     <!-- CUSTOM JS -->
     <script src="index.js"></script>
