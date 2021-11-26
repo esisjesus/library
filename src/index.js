@@ -5,6 +5,7 @@ const signUpModal = new bootstrap.Modal(document.querySelector('#signUpModal'))
 const signInModal = new bootstrap.Modal(document.querySelector('#signInModal'))
 const addBookForm = document.querySelector('#addBookForm')
 const addBookModal = new bootstrap.Modal(document.querySelector('#addBookModal'))
+const library = document.querySelector("#library")
 
 // REGISTER A NEW USER USING FIREBASE AUTH:
 signUpForm.addEventListener('submit', (e) => {
@@ -40,10 +41,15 @@ signInForm.addEventListener('submit', (e) => {
         .then((userCredential) => {
             // Signed in
             var user = userCredential.user;
-
+            
+            fetchBooks()
             // Close and clear form
             signInForm.reset()
             signInModal.hide()
+            // fetch feed data
+            auth.onAuthStateChanged(user =>{
+                user? fetchBooks() : null
+            })
         })
         .catch((error) => {
             var errorCode = error.code;
@@ -60,6 +66,10 @@ googleButtons.forEach(e => {
             .then(result => {
                 // Create the new user document in firestore
                 createNewUserDocument(result.user)
+                // fetch feed data
+                auth.onAuthStateChanged(user =>{
+                    user? fetchBooks() : null
+                })
             }).catch(err => {
                 console.log(err)
             })
@@ -74,7 +84,13 @@ googleButtons.forEach(e => {
 logout.addEventListener("click", (e) => {
     e.preventDefault();
     auth.signOut().then(() => {
-        console.log("logged out")
+        auth.onAuthStateChanged(user =>{
+            if(!user){
+                while(library.lastChild.id != "firstNode"){
+                    library.removeChild(library.lastChild)
+                }
+            }
+        })
     })
 })
 
@@ -137,6 +153,41 @@ addBookForm.addEventListener('submit', (e) => {
 // DISPLAY BOOKS
 function fetchBooks() {
     const docRef = db.collection('users').doc(auth.currentUser.uid).collection('books')
-    docRef.get().then(data => 
-        console.log(data))
+    docRef.get().then(querySnapshot =>{
+        querySnapshot.forEach(doc => {
+            const data = doc.data()
+            console.log(data);
+            addCardToHTML(data.title, data.author, data.pages, data.description, data.read)
+        })
+    })
 }
+// INJECT THE BOOK CARDS INTO THE HTML
+function addCardToHTML(title, author, pages, description, read) {
+    const card = `<div class="card shadow col-sm-12 col-lg-3 m-1" style="max-width: 18rem; min-height: 350px;">
+    <div class="card-body">
+      <h5 class="card-title text-danger">${title}</h5>
+      <h6 class="card-subtitle mb-2 text-muted">${author} ${pages}</h6>
+      <p class="card-text">${description}</p>
+      <span>${read == "on"? "I've read this book" : "I haven't read this book yet"}</span>
+    </div>
+  </div>`
+
+  library.innerHTML += card
+}
+
+//INIT
+function init(){
+    auth.onAuthStateChanged(user =>{
+        user? fetchBooks() : null
+    })
+    
+}
+
+window.onload = function() {
+    init()
+}
+
+
+
+
+

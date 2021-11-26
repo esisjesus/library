@@ -142,13 +142,15 @@
     </div>
     </div>
     <!-- User's Library -->
-    <div class="container-fluid p-5" id="library" >
+    <div class="container-fluid p-5" >
         <!-- Add new book card -->
-        <div class="card border-danger mb-3 shadow bg-danger col " onclick="addNewBookModal()"
-            style="max-width: 18rem; min-height: 350px; cursor: pointer;">
-            <i style="font-size: 150px; position: relative; top: 55px;"
-                class="icon ion-md-add-circle text-center text-light"></i>
-            <h5 class="text-center mt-4 text-light">Add new book</h5>
+        <div class="row" id="library" >
+            <div id="firstNode" class="card border-danger shadow bg-danger col-sm-12 col-lg-3  " onclick="addNewBookModal()"
+                style="max-width: 18rem; min-height: 350px; cursor: pointer;">
+                <i style="font-size: 150px; position: relative; top: 55px;"
+                    class="icon ion-md-add-circle text-center text-light"></i>
+                <h5 class="text-center mt-4 text-light">Add new book</h5>
+            </div>
         </div>
 
     </div>
