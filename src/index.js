@@ -30,54 +30,69 @@ signUpForm.addEventListener('submit', (e) => {
 })
 
 // USER SIGN IN USING FIREBASE AUTH:
-signInForm.addEventListener('submit', (e) => {
-    e.preventDefault();
+signInForm.addEventListener('submit', e=>{handleSignIn(e)})
 
-
+function handleSignIn(ev){
+    ev.preventDefault();
+    signInWithEmail()
+    .then(books=>{
+        books.forEach(book=>{
+            addCardToHTML(book.data().title, book.data().author, book.data().pages, book.data().description, book.data().read)
+        })
+    })
+}
+function signInWithEmail(){
     const email = document.querySelector("#signInEmail").value
     const password = document.querySelector("#signInPassword").value
-
-    auth.signInWithEmailAndPassword(email, password)
-        .then((userCredential) => {
-            // Signed in
-            var user = userCredential.user;
-            
-            fetchBooks()
-            // Close and clear form
-            signInForm.reset()
-            signInModal.hide()
-            // fetch feed data
-            auth.onAuthStateChanged(user =>{
-                user? fetchBooks() : null
+    return new Promise((resolve, reject)=>{
+        auth.signInWithEmailAndPassword(email, password)
+            .then((userCredential) => {
+                // Signed in
+                var user = userCredential.user;
+                // Close and clear form
+                signInForm.reset()
+                signInModal.hide()
+                
             })
-        })
-        .catch((error) => {
-            var errorCode = error.code;
-            var errorMessage = error.message;
-        });
-})
+            .catch((error) => {
+                var errorCode = error.code;
+                var errorMessage = error.message;
+            });
+    })
+
+}
 
 // GOOGLE SIGN IN FUNCTION:
 const googleButtons = document.querySelectorAll("#googleSignIn")
-googleButtons.forEach(e => {
-    e.addEventListener('click', (e) => {
-        const provider = new firebase.auth.GoogleAuthProvider()
-        auth.signInWithPopup(provider)
+function handleGoogleSignIn(){
+    signInWithGoogle()
+    .then(fetchBooks)
+    .then(books=>{
+        books.forEach(book=>{
+            addCardToHTML(book.data().title, book.data().author, book.data().pages, book.data().description, book.data().read)
+        })
+    })
+}
+function signInWithGoogle(){
+    const provider = new firebase.auth.GoogleAuthProvider()
+        return new Promise((resolve, reject)=>{
+            auth.signInWithPopup(provider)
             .then(result => {
                 // Create the new user document in firestore
                 createNewUserDocument(result.user)
-                // fetch feed data
-                auth.onAuthStateChanged(user =>{
-                    user? fetchBooks() : null
-                })
+                
+                signUpForm.reset()
+                signUpModal.hide()
+                signInForm.reset()
+                signInModal.hide()
+                
             }).catch(err => {
                 console.log(err)
             })
-        signUpForm.reset()
-        signUpModal.hide()
-        signInForm.reset()
-        signInModal.hide()
-    })
+        })
+}
+googleButtons.forEach(e => {
+    e.addEventListener('click', handleGoogleSignIn)
 })
 
 // LOGOUT EVENT: 
@@ -134,6 +149,7 @@ function addNewBook(title, author, pages, description, read) {
     const newBook = new Book(title, author, pages, description, read)
 
     db.collection('users').doc(auth.currentUser.uid).collection('books').doc().set(Object.assign({}, newBook))
+    fetchBooks()
 }
 
 addBookForm.addEventListener('submit', (e) => {
@@ -153,14 +169,17 @@ addBookForm.addEventListener('submit', (e) => {
 // DISPLAY BOOKS
 function fetchBooks() {
     const docRef = db.collection('users').doc(auth.currentUser.uid).collection('books')
-    docRef.get().then(querySnapshot =>{
-        querySnapshot.forEach(doc => {
-            const data = doc.data()
-            console.log(data);
-            addCardToHTML(data.title, data.author, data.pages, data.description, data.read)
+    return new Promise((resolve, reject)=>{
+        docRef.get().then(querySnapshot =>{
+            resolve(querySnapshot.docs)
+        }).catch(err=>{
+            console.log(err);
+            
         })
+
     })
 }
+
 // INJECT THE BOOK CARDS INTO THE HTML
 function addCardToHTML(title, author, pages, description, read) {
     const card = `<div class="card shadow col-sm-12 col-lg-3 m-1" style="max-width: 18rem; min-height: 350px;">
@@ -178,7 +197,13 @@ function addCardToHTML(title, author, pages, description, read) {
 //INIT
 function init(){
     auth.onAuthStateChanged(user =>{
-        user? fetchBooks() : null
+        user? fetchBooks()
+        .then(books=>{
+            books.forEach(book=>{
+                addCardToHTML(book.data().title, book.data().author, book.data().pages, book.data().description, book.data().read)
+            })
+        })
+        : null
     })
     
 }
