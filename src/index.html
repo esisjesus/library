@@ -163,6 +163,7 @@
     <script src="https://www.gstatic.com/firebasejs/8.7.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.7.1/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.7.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.7.1/firebase-storage.js"></script>
     <script>
         const firebaseConfig = {
             apiKey: "AIzaSyDPeuZEJp7AMxdt8-HfV6mRVGViCTxIGEQ",
@@ -177,6 +178,7 @@
         const app = firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth()
         const db = firebase.firestore(app);
+        const storage = firebase.storage()
     </script>
     <!-- CUSTOM JS -->
     <script src="index.js"></script>

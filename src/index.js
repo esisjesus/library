@@ -150,7 +150,7 @@ addBookForm.addEventListener('submit', (e) => {
     const author = document.querySelector('#bookAuthor').value
     const pages = document.querySelector('#bookPages').value
     const description = document.querySelector('#bookDescription').value
-    const read = document.querySelector('#bookRead').value
+    const read = document.querySelector('#bookRead').checked
     
     addBookForm.reset()
     addBookModal.hide()
@@ -188,7 +188,7 @@ function addCardToHTML(title, author, pages, description, read) {
       <h5 class="card-title text-danger">${title}</h5>
       <h6 class="card-subtitle mb-2 text-muted">${author} ${pages}</h6>
       <p class="card-text">${description}</p>
-      <span>${read == "on" ? "I've read this book" : "I haven't read this book yet"}</span>
+      <span>${read == true ? "I've read this book" : "I haven't read this book yet"}</span>
     </div>
   </div>`
 
